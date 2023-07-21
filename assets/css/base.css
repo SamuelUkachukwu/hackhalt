@@ -1,0 +1,22 @@
+.logo{
+    font-family: 'Fascinate Inline', cursive;
+}
+button{
+    width: 100%;
+}
+
+.display{
+    background-color: #cac6c6;
+}
+
+.password{
+    width: 90%;
+}
+
+.togglePassword{
+    cursor: pointer;
+}
+
+.emoji{
+    /* transition: 5s; */
+}
