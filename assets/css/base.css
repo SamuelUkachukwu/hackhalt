@@ -1,10 +1,18 @@
+body{
+    background: linear-gradient(45deg, #000850 0%, #000320 100%), radial-gradient(100% 225% at 100% 0%, #FF6928 0%, #000000 100%), linear-gradient(225deg, #FF7A00 0%, #000000 100%), linear-gradient(135deg, #CDFFEB 10%, #CDFFEB 35%, #009F9D 35%, #009F9D 60%, #07456F 60%, #07456F 67%, #0F0A3C 67%, #0F0A3C 100%);
+    background-blend-mode: screen, overlay, hard-light, normal;
+}
 .logo{
-    font-family: 'Fascinate Inline', cursive;
+    font-family: 'Angkor', cursive;
 }
-button{
+#submit-btn{
     width: 100%;
+    background-color: #E80000;
+    transition: 0.4s;
 }
-
+button:hover {
+    background-color: #FFD700 !important;
+}
 .display{
     background-color: #cac6c6;
 }
@@ -20,3 +28,14 @@ button{
 .emoji{
     /* transition: 5s; */
 }
+input, button, .message, .display{
+    box-shadow: 2px 2px 2px #000;
+}
+.message{
+    font-family: 'Roboto Condensed', sans-serif;
+}
+@media (max-width: 768px) {
+    .navbar {
+        position: static !important; 
+    }
+  }
