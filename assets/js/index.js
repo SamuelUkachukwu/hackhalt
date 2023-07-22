@@ -34,46 +34,54 @@ function validateForm() {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const firstLetter = username.charAt(0);
     let submitBtn = document.getElementById('submit-btn');
+
     // Check if username is not empty
     if (username.trim() === '') {
         displayFeedback('Username cannot be empty.', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_5.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
     // Check if username starts with capital letter
     if (!/[A-Z]/.test(firstLetter)) {
         displayFeedback('Username must start with a capital letter.', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_10.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
     // Check if username is more than 8 letters
     if (username.length < 5) {
         displayFeedback('Username must be at least 5 characters.', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_21.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
     // Check if username contains forbidden characters
     if (/[\(\){}\[\]\|`¬¦!"£$%^&*"<>\:\;#~_\-+=,@\.]/.test(username)) {
         displayFeedback('Usernames cannot contain forbidden characters.', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_23.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
     // Check if username contains spaces
     if (/\s/.test(username)) {
         displayFeedback('Username cannot contain spaces.', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_16.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
     // Check if email pattern match
     if (!email.match(emailPattern)) {
         displayFeedback('Email pattern does not match email addresses', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_9.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
     // Check if password contains consecutive letters or numbers
     if (/(.)\1/.test(password)) {
         displayFeedback('Password cannot contain consecutive letters or numbers.', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_6.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
 
@@ -81,6 +89,7 @@ function validateForm() {
     if (password.trim() === '') {
         displayFeedback('Password cannot be empty.', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_4.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
 
@@ -88,6 +97,7 @@ function validateForm() {
     if (!/(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)) {
         displayFeedback('Password must include a combination of capital letters, numbers, and characters.', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_27.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
 
@@ -95,6 +105,7 @@ function validateForm() {
     if (password.length < 8) {
         displayFeedback('Password must be more than 8 characters.', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_13.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
 
@@ -102,14 +113,14 @@ function validateForm() {
     if (password !== passwordRepeat) {
         displayFeedback('Passwords do not match.', '#E80000');
         emoji.innerHTML = `<img src="assets/images/sticker_14.png" alt="" style="width:  80%; margin: auto;">`;
+        submitBtn.style.backgroundColor = "#E80000";
         return false;
     }
 
     displayFeedback('Everything Looks Good', '#69aa22');
     emoji.innerHTML = `<img src="assets/images/sticker_1.png" alt="" style="width:  80%; margin: auto;">`;
-    submitBtn.style.backgroundColor = "#00FF00";
-
-    // submit form if all validation is true.
+    submitBtn.style.backgroundColor = "#69aa22";
+    // form is submitted if validation is true.
     return true;
 
 }
