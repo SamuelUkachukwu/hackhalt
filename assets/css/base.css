@@ -12,6 +12,12 @@ body {
     font-family: 'Roboto Condensed', sans-serif;
 }
 
+/* hero page  */
+.hero {
+    width: 100% !important;
+    height: 100vh !important;
+}
+
 /* form submit button styling */
 #submit-btn {
     width: 100%;
@@ -30,9 +36,11 @@ body {
 .redBtn {
     background-color: #E80000 !important;
 }
-.greenBtn{
+
+.greenBtn {
     background-color: #69aa22 !important;
 }
+
 .display {
     background-color: #cac6c6;
 }
@@ -47,12 +55,15 @@ body {
 .dot {
     width: 10px;
     height: 10px;
-    background-color: #0de631;
+    background-color: #36FF5A;
     border-radius: 50%;
     margin: 5px;
     opacity: 1;
-    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+    box-shadow: 1px 1px 6px #36FF5A;
+    /* box-shadow: 0 0 5px #36FF5A; */
     animation: pulse 1s infinite alternate;
+
+
 }
 
 @keyframes pulse {
@@ -87,5 +98,8 @@ button,
 @media (max-width: 768px) {
     .navbar {
         position: static !important;
+    }
+    .hero{
+        height: 105vh !important;
     }
 }
