@@ -1,11 +1,19 @@
-body{
+body {
     background: linear-gradient(45deg, #000850 0%, #000320 100%), radial-gradient(100% 225% at 100% 0%, #FF6928 0%, #000000 100%), linear-gradient(225deg, #FF7A00 0%, #000000 100%), linear-gradient(135deg, #CDFFEB 10%, #CDFFEB 35%, #009F9D 35%, #009F9D 60%, #07456F 60%, #07456F 67%, #0F0A3C 67%, #0F0A3C 100%);
     background-blend-mode: screen, overlay, hard-light, normal;
 }
-.logo, #passwordStrength{
+
+.logo,
+#passwordStrength {
     font-family: 'Angkor', cursive;
 }
-#submit-btn{
+
+.message {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* form submit button styling */
+#submit-btn {
     width: 100%;
     background-color: #E80000;
     transition: 0.4s;
@@ -13,21 +21,30 @@ body{
     color: #fff !important;
     letter-spacing: 1.1px;
 }
+
 #submit-btn:hover {
     color: #000 !important;
     background-color: #FFD700 !important;
 }
-.display{
+
+.redBtn {
+    background-color: #E80000 !important;
+}
+.greenBtn{
+    background-color: #69aa22 !important;
+}
+.display {
     background-color: #cac6c6;
 }
 
+/* password strength dots */
 .dots-container {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
 
-  .dot {
+.dot {
     width: 10px;
     height: 10px;
     background-color: #0de631;
@@ -36,39 +53,39 @@ body{
     opacity: 1;
     box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
     animation: pulse 1s infinite alternate;
-  }
+}
 
-  @keyframes pulse {
+@keyframes pulse {
     from {
-      transform: scale(1);
-      opacity: 0.2;
+        transform: scale(1);
+        opacity: 0.2;
     }
-    to {
-      transform: scale(1.5);
-      opacity: 0.8;
-    }
-  }
 
-.password{
+    to {
+        transform: scale(1.5);
+        opacity: 0.8;
+    }
+}
+
+/* password input length and toggle button */
+.password {
     width: 90%;
 }
 
-.togglePassword{
+.togglePassword {
     cursor: pointer;
 }
 
-.emoji{
-    /* transition: 5s; */
-}
-input, button, .message, .display{
-    /* box-shadow: 2px 2px 2px #000; */
+input,
+button,
+.message,
+.display {
     box-shadow: 2px 2px 6px #00000066;
 }
-.message{
-    font-family: 'Roboto Condensed', sans-serif;
-}
+
+
 @media (max-width: 768px) {
     .navbar {
-        position: static !important; 
+        position: static !important;
     }
-  }
+}
