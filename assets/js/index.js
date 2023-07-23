@@ -120,18 +120,83 @@ function validateForm() {
     displayFeedback('Everything Looks Good', '#69aa22');
     emoji.innerHTML = `<img src="assets/images/sticker_1.png" alt="" style="width:  80%; margin: auto;">`;
     submitBtn.style.backgroundColor = "#69aa22";
-    // form is submitted if validation is true.
+    // submit form if validation is true
     return true;
 
 }
 
 function checkFormError() {
-    // function clears previous feedback when the user is typing.
+    let password = document.getElementById('floatingPassword').value;
+    const strength = calcPasswordStrength(password);
+    displayPasswordStrength(strength);
+    // This clears previous feedback when the user is typing.
     document.getElementById('feedbackArea').innerHTML = `<p class="p-3 border text-black text-center rounded bg-light message">Observing your input with interest... Hmmm...</p>`;
     emoji.innerHTML = `<img src="assets/images/sticker_7.png" alt="" style="width:  80%; margin: auto;">`;
     setTimeout(validateForm, 1000);
+    updateDots(strength);
 }
 
+function calcPasswordStrength(password) {
+    // Checks password strength against different parameters.
+    const minLength = 8;
+    const maxLength = 20;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChars = /[!@#$%^&*()_+[\]{};':"\\|,.<>/?]/.test(password);
+    const hasConsecutiveChars = /(.)\1/.test(password);
+
+    let score = 0;
+
+    if (password.length === 0) {
+        score = 0;
+    } else if (password.length >= minLength && password.length <= maxLength) {
+        score += 25;
+    }
+    
+    if (hasUpperCase && hasLowerCase) {
+        score += 20;
+    }
+    
+    if (hasNumbers) {
+        score += 20;
+    }
+    
+    if (hasSpecialChars) {
+        score += 25;
+    }
+    
+    if (!hasConsecutiveChars) {
+        score += 10;
+    }
+    
+    score = Math.max(0, Math.min(100, score));
+
+    return score;
+}
+
+
+function updateDots(strength) {
+    const maxDots = 10;
+    const dotsContainer = document.getElementById('dotsContainer');
+
+    // This will Calculate the number of dots to show based on password strength
+    const numDotsDisplayed = Math.ceil((strength / 100) * maxDots);
+
+    // This will Clear existing dots
+    dotsContainer.innerHTML = '';
+
+    // This Creates and append new dots
+    for (let i = 0; i < numDotsDisplayed; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dotsContainer.appendChild(dot);
+    }
+}
+function displayPasswordStrength(strength) {
+    const passwordStrength = document.getElementById('passwordStrength');
+    passwordStrength.textContent = `${strength}%`;
+  }
 function displayFeedback(message, color) {
     let feedbackArea = document.getElementById('feedbackArea');
     feedbackArea.innerHTML = `<p class="p-3 border text-center rounded bg-light message"> ${message}</p>`;
