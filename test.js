@@ -25,6 +25,17 @@ togglePasswordRptBtn.addEventListener('click', () => {
     }
 });
 
+function checkFormError() {
+    let password = document.getElementById('floatingPassword').value;
+    const strength = calcPasswordStrength(password);
+    displayPasswordStrength(strength);
+    // This clears previous feedback when the user is typing.
+    document.getElementById('feedbackArea').innerHTML = `<p class="p-3 border text-black text-center rounded bg-white message">Observing your input with interest... Hmmm...</p>`;
+    emoji.innerHTML = `<img src="assets/images/sticker_7.png" alt="" style="width:  80%; margin: auto;">`;
+    setTimeout(validateForm, 1000);
+    updateDots(strength);
+}
+
 function validateForm() {
     let username = document.getElementById('floatingname').value;
     let email = document.getElementById('floatingInput').value;
@@ -126,16 +137,7 @@ function validateForm() {
 
 }
 
-function checkFormError() {
-    let password = document.getElementById('floatingPassword').value;
-    const strength = calcPasswordStrength(password);
-    displayPasswordStrength(strength);
-    // This clears previous feedback when the user is typing.
-    document.getElementById('feedbackArea').innerHTML = `<p class="p-3 border text-black text-center rounded bg-white message">Observing your input with interest... Hmmm...</p>`;
-    emoji.innerHTML = `<img src="assets/images/sticker_7.png" alt="" style="width:  80%; margin: auto;">`;
-    setTimeout(validateForm, 1000);
-    updateDots(strength);
-}
+
 
 function calcPasswordStrength(password) {
     // Checks password strength against different parameters.
@@ -206,14 +208,14 @@ function displayFeedback(message, color) {
     feedbackArea.style.color = color;
 }
 
+
 const createMember = async (e) => {
     e.preventDefault();
 
     const member = {
-        username: form.username.value,
-        email: form.email.value,
-        password: form.password.value,
-
+        username: registerForm.username.value,
+        email: registerForm.email.value,
+        password: registerForm.password.value,
     };
 
     try {
@@ -229,13 +231,17 @@ const createMember = async (e) => {
             throw new Error('Network response was not ok.');
         }
 
-        // Redirect to the profile.html after successful registration creation
-        window.location.replace('/profile.html');
-    } catch (error) {
-        alert('Error creating member:', error);
-    }
+        const data = await response.json();
+        const memberId = data.id;
 
+        // Redirect to the profile.html after successful registration creation
+        window.location.replace(`/profile.html?memberId=${memberId}`);
+    } catch (error) {
+        alert('Error creating post:', error);
+    }
 };
 
-const form = document.getElementById('register-form');
-form.addEventListener('submit', createMember);
+export { createMember };
+
+let registerForm = document.querySelector('.register');
+registerForm.addEventListener('submit', createMember);

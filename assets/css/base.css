@@ -1,4 +1,4 @@
-body {
+#register-page {
     background: linear-gradient(45deg, #000850 0%, #000320 100%), radial-gradient(100% 225% at 100% 0%, #FF6928 0%, #000000 100%), linear-gradient(225deg, #FF7A00 0%, #000000 100%), linear-gradient(135deg, #CDFFEB 10%, #CDFFEB 35%, #009F9D 35%, #009F9D 60%, #07456F 60%, #07456F 67%, #0F0A3C 67%, #0F0A3C 100%);
     background-blend-mode: screen, overlay, hard-light, normal;
 }
@@ -94,12 +94,36 @@ button,
     box-shadow: 2px 2px 6px #00000066;
 }
 
-
+/* profile page styling */
+.nav-profile{
+    background-color: #1f684a;
+}
+#profile-page {
+    background: radial-gradient(65% 100% at 50% 0%, #00FF94 0%, rgba(0, 255, 148, 0.25) 100%), linear-gradient(230deg, #000000 25%, #170059 100%), linear-gradient(215deg, #FFEBB9 10%, #19004E 80%), radial-gradient(100% 245% at 100% 100%, #FFFFFF 0%, #000353 100%), linear-gradient(125deg, #1400FF 0%, #3A0000 100%), linear-gradient(225deg, #00F0FF 30%, #000B6F 45%, #00EBFC 45%, #001676 65%, #00E1F6 65%, #001676 85%, #00ECFD 85%, #001676 100%), linear-gradient(135deg, #00F0FF 0%, #000B6F 15%, #00EBFC 15%, #001676 35%, #00E1F6 35%, #001676 55%, #00ECFD 55%, #001676 100%);
+    background-blend-mode: soft-light, screen, overlay, overlay, difference, overlay, normal;
+}
+.profile-card{
+    box-shadow: 2px 2px 4px #000;
+}
+.profile-section{
+    height: 100vh !important;
+    background-color: #1f684a;
+}
 @media (max-width: 768px) {
     .navbar {
         position: static !important;
     }
-    .hero{
+
+    .hero {
         height: 105vh !important;
+    }
+    .profile-section{
+        height: 100% !important;
+        width: 100vw !important;
+        padding-bottom: 20px;
+        border-radius: 0 0 5px 5px;
+    }
+    #profile-page {
+        height: 100vh;
     }
 }
