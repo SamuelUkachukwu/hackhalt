@@ -12,7 +12,7 @@ const dataPath = path.join(__dirname, 'data', 'db.json');
 // sets view engine
 app.set('view-engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
-
+app.use(express.static('public'));
 app.use(session({
     secret: process.env.SESSION_SECRET, // Replace 'your-secret-key' with a secret key for session encryption
     resave: false,

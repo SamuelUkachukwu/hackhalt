@@ -6,6 +6,13 @@
       "email": "shybold.inc@gmail.com",
       "password": "$2b$10$29Zx/2QVdWqCsC1WmmOjnOtGR6mlDrjY5hvli896AcZF8YFmXOIJe",
       "admin": false
+    },
+    {
+      "id": 2,
+      "username": "Honest",
+      "email": "blackclawent@yahoo.com",
+      "password": "$2b$10$9wUYWETYsmuF9FB1jq3EJerhCM4U3H4rAqpThMrbXInB.NlanK4pu",
+      "admin": false
     }
   ]
 }
