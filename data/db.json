@@ -1,0 +1,11 @@
+{
+  "members": [
+    {
+      "id": 1,
+      "username": "Shybold",
+      "email": "shybold.inc@gmail.com",
+      "password": "$2b$10$29Zx/2QVdWqCsC1WmmOjnOtGR6mlDrjY5hvli896AcZF8YFmXOIJe",
+      "admin": false
+    }
+  ]
+}
