@@ -13,6 +13,13 @@
       "email": "blackclawent@yahoo.com",
       "password": "$2b$10$9wUYWETYsmuF9FB1jq3EJerhCM4U3H4rAqpThMrbXInB.NlanK4pu",
       "admin": false
+    },
+    {
+      "id": 3,
+      "username": "Smoke",
+      "email": "shybold@yahoo.com",
+      "password": "$2b$10$JQITfRtaSP7cYSqADOgpXOh0BZUHEXXVPX6/CPfp375ZyUs5gfQtu",
+      "admin": false
     }
   ]
 }

@@ -14,8 +14,7 @@ app.set('view-engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(session({
-    secret: process.env.SESSION_SECRET, // Replace 'your-secret-key' with a secret key for session encryption
-    resave: false,
+    secret: process.env.SESSION_SECRET, 
     saveUninitialized: false
 }));
 
@@ -83,7 +82,7 @@ app.post('/register', async (req, res) => {
         console.log('Registration form submitted with data:', req.body);
         // Check if the passwords match
         if (password !== confirmPassword) {
-            return res.status(400).send('Passwords do not match');
+            return res.status(400).json({ error: 'Passwords do not match'});
         }
 
         // Hash the password using bcrypt
@@ -99,13 +98,25 @@ app.post('/register', async (req, res) => {
             console.error('Error reading data:', error);
         }
 
+        // Check if the username or email already exists
+        const existingMemberWithUsername = data.members.find(member => member.username === username);
+        const existingMemberWithEmail = data.members.find(member => member.email === email);
+
+        if (existingMemberWithUsername) {
+            return res.status(400).json({ error: 'Username already exists'});
+        }
+
+        if (existingMemberWithEmail) {
+            return res.status(400).json({ error: 'Email already exists'});
+        }
+
         // Create a new member object
         const newMember = {
             id: ++lastUsedId,
             username,
             email,
             password: hashedPassword,
-            admin: false, // Set the default value for the 'admin' property here
+            admin: false,
         };
         console.log('New member object:', newMember);
         // Add the new member to the 'members' array in the data object
@@ -137,7 +148,7 @@ app.get('/logout', (req, res) => {
             console.error('Error destroying session:', error);
         } else {
             console.log('User logged out successfully!');
-            res.redirect('/login'); // Redirect the user to the login page after logout
+            res.redirect('/');
         }
     });
 });

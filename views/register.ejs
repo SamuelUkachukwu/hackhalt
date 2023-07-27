@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,87 +16,118 @@
     <link rel="stylesheet" href="/css/base.css">
 
 </head>
+
 <body id="register-page">
-  <nav class="navbar fixed-top">
-      <div class="container">
-          <a class="navbar-brand logo text-white" href="#">
-              HackHalt
-          </a>
-      </div>
-  </nav>
-  <div class="container">
-      <div class="row m-auto justify-content-center align-items-center hero">
-          <div class="col-12 col-md-6">
-              <div class="mb-2">
-                  <h1 class="text-center logo fs-3 text-white">Join HackHalt</h1>
-              </div>
-              <div class="row p-2">
-                  <div class="dots-container col-10 px-0" id="dotsContainer">
+    <nav class="navbar fixed-top">
+        <div class="container">
+            <a class="navbar-brand logo text-white" href="/">
+                HackHalt
+            </a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row m-auto justify-content-center align-items-center hero">
+            <div class="col-12 col-md-6">
+                <div class="mb-2">
+                    <h1 class="text-center logo fs-3 text-white">Join HackHalt</h1>
+                </div>
+                <div class="row p-2">
+                    <div class="dots-container col-10 px-0" id="dotsContainer">
 
-                  </div>
-                  <div class="col-2 text-white px-0" id="passwordStrength"></div>
-              </div>
-              <form action="/register" method="POST" id="register-form">
-                  <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="floatingname" name="username" maxlength="30"
-                          placeholder="name" required oninput="checkFormError()">
-                      <label for="floatingname">Username</label>
-                  </div>
-                  <div class="form-floating mb-3">
-                      <input type="email" class="form-control" id="floatingInput" name="email"
-                          placeholder="name@example.com" required oninput="checkFormError()">
-                      <label for="floatingInput">Email address</label>
-                  </div>
-                  <div class="form-floating mb-3 d-flex">
-                      <input type="password" class="form-control password" name="password" id="floatingPassword"
-                          placeholder="Password" oninput="checkFormError()">
-                      <label for="floatingPassword">Password</label>
-                      <div id="togglePassword" class="p-2 ms-2 d-flex align-items-center togglePassword"
-                          data-target="floatingPassword">
-                          <i class="fas fa-eye-slash fs-5 text-white"></i>
-                      </div>
-                  </div>
-                  <div class="form-floating d-flex">
-                      <input type="password" class="form-control password" name="confirmPassword" id="floatingPasswordRepeat"
-                          placeholder="Password Again" oninput="checkFormError()">
-                      <label for="floatingPasswordRepeat">Password Repeat</label>
-                      <div id="togglePasswordRpt" class="p-2 ms-2 d-flex align-items-center togglePassword"
-                          data-target="floatingPasswordRepeat">
-                          <i class="fas fa-eye-slash fs-5 text-white"></i>
-                      </div>
-                  </div>
-                  <div class="mt-3">
-                      <!-- Button submit -->
-                      <button class="btn btn-large p-2 text-uppercase submit-btn"
-                          type="submit"><strong>Register</strong></button>
-                  </div>
-              </form>
-              <div class="py-3">
-                <p class="text-white">Existing Users, Log in Here: <a class="text-info text-decoration-none" href="/login">Login</a></p>
-              </div>
-          </div>
-          <div class="col-12 col-md-6">
-              <div class="row">
-                  <div class="col-12 col-md-11 m-auto" id="feedbackArea">
-                      <p class="p-3 border text-center rounded bg-white message">
-                          Hi! I will be your guide, ensuring your online presence is secure and safe
-                      </p>
-                  </div>
-              </div>
-              <div class="row m-auto">
-                  <div id="emoji" class="col-12 col-md-11 rounded d-flex justify-content-center m-auto display py-2">
-                      <img src="/images/sticker_7.png" alt="" style="width:  80%; margin: auto;">
-                  </div>
-              </div>
+                    </div>
+                    <div class="col-2 text-white px-0" id="passwordStrength"></div>
+                </div>
+                <form action="/register" method="POST" id="register-form" onsubmit="return validateForm()">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingname" name="username" maxlength="30"
+                            placeholder="name" required oninput="checkFormError()">
+                        <label for="floatingname">Username</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="floatingInput" name="email"
+                            placeholder="name@example.com" required oninput="checkFormError()">
+                        <label for="floatingInput">Email address</label>
+                    </div>
+                    <div class="form-floating mb-3 d-flex">
+                        <input type="password" class="form-control password" name="password" id="floatingPassword"
+                            placeholder="Password" oninput="checkFormError()">
+                        <label for="floatingPassword">Password</label>
+                        <div id="togglePassword" class="p-2 ms-2 d-flex align-items-center togglePassword"
+                            data-target="floatingPassword">
+                            <i class="fas fa-eye-slash fs-5 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="form-floating d-flex">
+                        <input type="password" class="form-control password" name="confirmPassword"
+                            id="floatingPasswordRepeat" placeholder="Password Again" oninput="checkFormError()">
+                        <label for="floatingPasswordRepeat">Password Repeat</label>
+                        <div id="togglePasswordRpt" class="p-2 ms-2 d-flex align-items-center togglePassword"
+                            data-target="floatingPasswordRepeat">
+                            <i class="fas fa-eye-slash fs-5 text-white"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <!-- Button submit -->
+                        <button class="btn btn-large p-2 text-uppercase submit-btn"
+                            type="submit"><strong>Register</strong></button>
+                    </div>
+                </form>
+                <div class="py-3">
+                    <p class="text-white">Existing Users, Log in Here: <a class="text-info text-decoration-none"
+                            href="/login">Login</a></p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-12 col-md-11 m-auto" id="feedbackArea">
+                        <p class="p-3 border text-center rounded bg-white message">
+                            Hi! I will be your guide, ensuring your online presence is secure and safe
+                        </p>
+                    </div>
+                </div>
+                <div class="row m-auto">
+                    <div id="emoji" class="col-12 col-md-11 rounded d-flex justify-content-center m-auto display py-2">
+                        <img src="/images/sticker_7.png" alt="" style="width:  80%; margin: auto;">
+                    </div>
+                </div>
 
-          </div>
-      </div>
-  </div>
+            </div>
+        </div>
+    </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-      crossorigin="anonymous"></script>
-  <script src="/js/register.js"></script>
-  <!-- <script type="module" src="assets/js/index.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <script src="/js/register.js"></script>
+    <!-- <script type="module" src="assets/js/index.js"></script> -->
+    <!-- <script>
+        fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Registration successful, redirect to profile page
+                    window.location.href = '/profile';
+                } else {
+                    // Registration failed, handle the error message
+                    response.json()
+                        .then(data => {
+                            alert(data.error); // Display the error message to the user
+                        })
+                        .catch(error => {
+                            console.error('Error parsing response:', error);
+                        });
+                }
+            })
+            .catch(error => {
+                console.error('Error during registration:', error);
+            });
+
+    </script> -->
 </body>
+
 </html>
