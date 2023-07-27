@@ -14,7 +14,7 @@ app.set('view-engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(session({
-    secret: process.env.SESSION_SECRET, 
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: false
 }));
 
@@ -45,14 +45,14 @@ app.get('/login', (req, res) => {
     res.render('login.ejs');
 });
 
+// Handle login form post
 app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-        console.log('Login form submitted with data:', req.body);
-
+        
         // Find the user with the given username in the data
         const user = findUserByUsername(username);
-        console.log('User found by username:', user);
+
         // Check if the user exists and compare the hashed password
         if (!user || !(await bcrypt.compare(password, user.password))) {
             // If the username or password is incorrect, redirect back to the login page
@@ -63,7 +63,6 @@ app.post('/login', async (req, res) => {
         req.session.isAuthenticated = true;
 
         // Redirect to the profile page
-        console.log('User authenticated successfully! Redirecting to profile page.');
         res.redirect('/profile');
     } catch (error) {
         console.error(error);
@@ -76,13 +75,14 @@ app.get('/register', (req, res) => {
     res.render('register.ejs');
 });
 
+// Handle Registration form post
 app.post('/register', async (req, res) => {
     try {
         const { username, email, password, confirmPassword } = req.body;
-        console.log('Registration form submitted with data:', req.body);
         // Check if the passwords match
         if (password !== confirmPassword) {
-            return res.status(400).json({ error: 'Passwords do not match'});
+            req.session.errorMessage = 'Passwords do not match';
+            return res.redirect('/register');
         }
 
         // Hash the password using bcrypt
@@ -96,18 +96,22 @@ app.post('/register', async (req, res) => {
             data = JSON.parse(jsonData);
         } catch (error) {
             console.error('Error reading data:', error);
+            req.session.errorMessage = 'An error occurred during registration. Please try again.';
+            return res.redirect('/register');
         }
 
         // Check if the username or email already exists
-        const existingMemberWithUsername = data.members.find(member => member.username === username);
-        const existingMemberWithEmail = data.members.find(member => member.email === email);
+        const existingUsername = data.members.find(member => member.username === username);
+        const existingEmail = data.members.find(member => member.email === email);
 
-        if (existingMemberWithUsername) {
-            return res.status(400).json({ error: 'Username already exists'});
+        if (existingUsername) {
+            req.session.errorMessage = 'Username already exists';
+            return res.redirect('/register');
         }
 
-        if (existingMemberWithEmail) {
-            return res.status(400).json({ error: 'Email already exists'});
+        if (existingEmail) {
+            req.session.errorMessage = 'Email already exists';
+            return res.redirect('/register');
         }
 
         // Create a new member object
@@ -118,7 +122,6 @@ app.post('/register', async (req, res) => {
             password: hashedPassword,
             admin: false,
         };
-        console.log('New member object:', newMember);
         // Add the new member to the 'members' array in the data object
         data.members.push(newMember);
 
@@ -126,16 +129,15 @@ app.post('/register', async (req, res) => {
         fs.writeFile(dataPath, JSON.stringify(data, null, 2), (error) => {
             if (error) {
                 console.error('Error writing data:', error);
+                req.session.errorMessage = 'An error occurred during registration. Please try again.';
             } else {
-                console.log('Member registered and data saved successfully!');
+                req.session.successMessage = 'Registration successful! You can now log in with your credentials.';
             }
+            res.redirect('/login');
         });
-        req.session.isAuthenticated = true;
-        // Redirect the user to the login page after successful registration
-        console.log('User registered successfully! Redirecting to profile page.');
-        res.redirect('/profile');
     } catch (error) {
         console.error(error);
+        req.session.errorMessage = 'An error occurred during registration. Please try again.';
         res.redirect('/register');
     }
 });
@@ -145,9 +147,8 @@ app.get('/logout', (req, res) => {
     // Destroy the session to log the user out
     req.session.destroy((error) => {
         if (error) {
-            console.error('Error destroying session:', error);
+            req.session.errorMessage = 'Error logging out of session. Please try again.';
         } else {
-            console.log('User logged out successfully!');
             res.redirect('/');
         }
     });
@@ -155,14 +156,17 @@ app.get('/logout', (req, res) => {
 
 // Profile route
 app.get('/profile', (req, res) => {
-    // Check if the user is authenticated (logged in)
+    // Check if the user is authenticated
     if (!req.session.isAuthenticated) {
         // If not authenticated, redirect back to the login page
         return res.redirect('/login');
     }
-
+    const successMessage = req.session.successMessage;
+    const errorMessage = req.session.errorMessage;
+    req.session.successMessage = null;
+    req.session.errorMessage = null;
     // Render the profile page since the user is authenticated
-    res.render('profile.ejs');
+    res.render('profile.ejs', { successMessage, errorMessage });
 });
 
 // Start the server and listen on port 3000
