@@ -175,6 +175,44 @@ app.get('/profile', (req, res) => {
     res.render('profile.ejs', { user, successMessage, errorMessage });
 });
 
+app.post('/change-password', async (req, res) => {
+    try {
+        
+        if (!req.session.isAuthenticated) {
+            return res.redirect('/login');
+        }
+
+        const { currentPassword, newPassword, confirmPassword } = req.body;
+        const user = req.session.user;
+
+        // Verify password matches session password
+        if (!(await bcrypt.compare(currentPassword, user.password))) {
+            req.session.errorMessage = 'Current password is incorrect';
+            return res.redirect('/profile');
+        }
+
+        // Verify password match
+        if (newPassword !== confirmPassword) {
+            req.session.errorMessage = 'New passwords do not match';
+            return res.redirect('/profile');
+        }
+
+        const saltRounds = 10;
+        const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+
+        user.password = hashedNewPassword;
+
+        req.session.user = user;
+
+        req.session.successMessage = 'Password changed successfully!';
+        res.redirect('/profile');
+    } catch (error) {
+        console.error(error);
+        req.session.errorMessage = 'An error occurred during password change. Please try again.';
+        res.redirect('/profile');
+    }
+});
+
 // Start the server and listen on port 3000
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');

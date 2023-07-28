@@ -42,11 +42,66 @@
                             </p>
                             <p class="card-text">Your current password sits at security level 1 </p>
                         </div>
-                        <a href="#" class="btn btn-primary mt-3">Upgrade Password</a>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop">
+                            Upgrade Password
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Thank you for upgrading
+                                            your password!</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <form action="/change-password" method="post">
+                                        <div class="modal-body">
+                                            <div class="form-floating mb-3">
+                                                <input type="password" class="form-control" id="currentPassword"
+                                                    name="currentPassword" placeholder="Password" required>
+                                                <label for="currentPassword"> Current Password</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="password" class="form-control" id="newPassword"
+                                                    name="newPassword" placeholder="Current Password:" required>
+                                                <label for="newPassword">New Password</label>
+                                            </div>
+                                            <div class="form-floating">
+                                                <input type="password" class="form-control" id="confirmPassword"
+                                                    name="confirmPassword" placeholder="Confirm New Password:" required>
+                                                <label for="confirmPassword">Confirm Password</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Upgrade Password</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- modal end -->
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-6"></div>
+            <div class="col-12 col-md-6">
+                <div class="p-4 d-none d-md-block"></div>
+                <div class="mt-5">
+                    <% if (successMessage) { %>
+                        <p class="p-3 border text-center rounded message bg-success text-white">
+                            <%= successMessage %>
+                        </p>
+                    <% } %>
+                    <% if (errorMessage) { %>
+                        <p class="p-3 border text-center rounded bg-danger text-white message">
+                            <%= errorMessage %>
+                        </p>
+                    <% } %>
+                </div>
+            </div>
         </div>
     </div>
 
