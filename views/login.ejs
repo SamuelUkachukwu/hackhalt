@@ -66,6 +66,11 @@
             </div>
             <div class="col-12 col-md-6">
                 <div class="row m-auto">
+                    <% if (successMessage) { %>
+                        <p class="p-3 border text-center rounded message bg-success text-white">
+                            <%= successMessage %>
+                        </p>
+                    <% } %>
                     <div id="emoji" class="col-12 col-md-11 rounded d-flex justify-content-center m-auto display py-2">
                         <img src="/images/sticker_7.png" alt="" style="width:  80%; margin: auto;">
                     </div>

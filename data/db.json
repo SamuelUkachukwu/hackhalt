@@ -2,23 +2,16 @@
   "members": [
     {
       "id": 1,
-      "username": "Shybold",
-      "email": "shybold.inc@gmail.com",
-      "password": "$2b$10$29Zx/2QVdWqCsC1WmmOjnOtGR6mlDrjY5hvli896AcZF8YFmXOIJe",
+      "username": "Honest",
+      "email": "test@mail.com",
+      "password": "$2b$10$nV2ZxxcZOL58Etcicb9PleySQNLxSBwjrCpcCbLPd4gqyoHhe1KSC",
       "admin": false
     },
     {
       "id": 2,
-      "username": "Honest",
-      "email": "blackclawent@yahoo.com",
-      "password": "$2b$10$9wUYWETYsmuF9FB1jq3EJerhCM4U3H4rAqpThMrbXInB.NlanK4pu",
-      "admin": false
-    },
-    {
-      "id": 3,
-      "username": "Smoke",
-      "email": "shybold@yahoo.com",
-      "password": "$2b$10$JQITfRtaSP7cYSqADOgpXOh0BZUHEXXVPX6/CPfp375ZyUs5gfQtu",
+      "username": "Testuser",
+      "email": "example@email.com",
+      "password": "$2b$10$t2Us3HJTqXM71Xf9biaF2O/UkG7Ax8Xe3NrlZYvE5rfsOY4MeTQae",
       "admin": false
     }
   ]

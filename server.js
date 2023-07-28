@@ -42,14 +42,15 @@ app.get('/', (req, res) => {
 
 // Login route
 app.get('/login', (req, res) => {
-    res.render('login.ejs');
+    res.render('login.ejs', { successMessage: req.session.successMessage });
+
 });
 
 // Handle login form post
 app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-        
+
         // Find the user with the given username in the data
         const user = findUserByUsername(username);
 
@@ -61,6 +62,9 @@ app.post('/login', async (req, res) => {
 
         // User authentication successful; create a session to track authentication status
         req.session.isAuthenticated = true;
+        
+        // Add user data to session 
+        req.session.user = user;
 
         // Redirect to the profile page
         res.redirect('/profile');
@@ -72,7 +76,7 @@ app.post('/login', async (req, res) => {
 
 // Register routes
 app.get('/register', (req, res) => {
-    res.render('register.ejs');
+    res.render('register.ejs', { errorMessage: req.session.errorMessage });
 });
 
 // Handle Registration form post
@@ -161,12 +165,14 @@ app.get('/profile', (req, res) => {
         // If not authenticated, redirect back to the login page
         return res.redirect('/login');
     }
+    const user = req.session.user;
+
     const successMessage = req.session.successMessage;
     const errorMessage = req.session.errorMessage;
     req.session.successMessage = null;
     req.session.errorMessage = null;
     // Render the profile page since the user is authenticated
-    res.render('profile.ejs', { successMessage, errorMessage });
+    res.render('profile.ejs', { user, successMessage, errorMessage });
 });
 
 // Start the server and listen on port 3000
