@@ -34,13 +34,14 @@
     background-color: #FFD700 !important;
 }
 
+.greenBtn {
+    background-color: #69aa22 !important;
+}
+
 .redBtn {
     background-color: #E80000 !important;
 }
 
-.greenBtn {
-    background-color: #69aa22 !important;
-}
 
 .display {
     background-color: #cac6c6;
@@ -81,15 +82,16 @@
     width: 90%;
 }
 
-.togglePassword {
-    cursor: pointer;
+.togglePassword,
+.input-group-text {
+    cursor: pointer !important;
 }
 
-input,
+.input-group,
 button,
 .message,
 .display {
-    box-shadow: 2px 2px 6px #00000066;
+    box-shadow: 2px 2px 6px #00000066 !important;
 }
 
 /* profile page styling */

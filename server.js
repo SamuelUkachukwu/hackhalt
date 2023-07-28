@@ -62,7 +62,7 @@ app.post('/login', async (req, res) => {
 
         // User authentication successful; create a session to track authentication status
         req.session.isAuthenticated = true;
-        
+
         // Add user data to session 
         req.session.user = user;
 
@@ -175,9 +175,17 @@ app.get('/profile', (req, res) => {
     res.render('profile.ejs', { user, successMessage, errorMessage });
 });
 
+function hasConsecutiveCharacters(inputString) {
+    for (let i = 0; i < inputString.length - 1; i++) {
+        if (inputString[i] === inputString[i + 1]) {
+            return true;
+        }
+    }
+    return false;
+}
+
 app.post('/change-password', async (req, res) => {
     try {
-        
         if (!req.session.isAuthenticated) {
             return res.redirect('/login');
         }
@@ -185,9 +193,35 @@ app.post('/change-password', async (req, res) => {
         const { currentPassword, newPassword, confirmPassword } = req.body;
         const user = req.session.user;
 
-        // Verify password matches session password
+        // Check if the provided current password matches the user's actual current password
         if (!(await bcrypt.compare(currentPassword, user.password))) {
-            req.session.errorMessage = 'Current password is incorrect';
+            req.session.errorMessage = 'Incorrect current password';
+            return res.redirect('/profile');
+        }
+
+        // Check if password is not empty
+        if (!newPassword || newPassword.trim() === '') {
+            req.session.errorMessage = 'Password should not be empty';
+            return res.redirect('/profile');
+        }
+
+        // Check if password contains consecutive letters or numbers
+        if (hasConsecutiveCharacters(newPassword)) {
+            req.session.errorMessage = 'Password should not contain consecutive letters or numbers';
+            return res.redirect('/profile');
+        }
+
+        // Check if password contains capital letters, numbers, and characters
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+        if (!passwordRegex.test(newPassword)) {
+            req.session.errorMessage =
+                'Password should contain capital letters, numbers, and special characters (@ $ ! % * ? &)';
+            return res.redirect('/profile');
+        }
+
+        // Check if password is more than 8 letters
+        if (newPassword.length < 8) {
+            req.session.errorMessage = 'Password should be at least 8 characters long';
             return res.redirect('/profile');
         }
 
@@ -197,15 +231,29 @@ app.post('/change-password', async (req, res) => {
             return res.redirect('/profile');
         }
 
+        // Hash the new password
         const saltRounds = 10;
         const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
 
-        user.password = hashedNewPassword;
+        // Update the user's password in the session
+        req.session.user.password = hashedNewPassword;
 
-        req.session.user = user;
+        // Persist the changes to the db.json file
+        const dbData = {
+            members: data.members, // Use the existing members array from the data object
+        };
 
-        req.session.successMessage = 'Password changed successfully!';
-        res.redirect('/profile');
+        // Write the updated data back to the db.json file
+        fs.writeFile(dataPath, JSON.stringify(dbData, null, 2), (error) => {
+            if (error) {
+                console.error('Error writing data:', error);
+                req.session.errorMessage = 'An error occurred during password change. Please try again.';
+            } else {
+                req.session.successMessage = 'Password changed successfully!';
+            }
+            res.redirect('/profile');
+        });
+
     } catch (error) {
         console.error(error);
         req.session.errorMessage = 'An error occurred during password change. Please try again.';

@@ -2,16 +2,16 @@
   "members": [
     {
       "id": 1,
-      "username": "Honest",
-      "email": "test@mail.com",
-      "password": "$2b$10$nV2ZxxcZOL58Etcicb9PleySQNLxSBwjrCpcCbLPd4gqyoHhe1KSC",
+      "username": "Testuser",
+      "email": "example@email.com",
+      "password": "$2b$10$t2Us3HJTqXM71Xf9biaF2O/UkG7Ax8Xe3NrlZYvE5rfsOY4MeTQae",
       "admin": false
     },
     {
       "id": 2,
-      "username": "Testuser",
-      "email": "example@email.com",
-      "password": "$2b$10$t2Us3HJTqXM71Xf9biaF2O/UkG7Ax8Xe3NrlZYvE5rfsOY4MeTQae",
+      "username": "Shybold",
+      "email": "test@mail.com",
+      "password": "$2b$10$jvyuQVG664dkTd/v/RHUg.BS7d.MYQ.RloNwLrcGyyM1/bWYdQrWO",
       "admin": false
     }
   ]

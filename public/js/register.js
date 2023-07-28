@@ -119,8 +119,7 @@ function validateForm() {
 
     displayFeedback('Everything Looks Good', '#69aa22');
     emoji.innerHTML = `<img src="/images/sticker_1.png" alt="" style="width:  80%; margin: auto;">`;
-    submitBtn.classList.remove('redBtn');
-    submitBtn.classList.add('greenBtn');
+    submitBtn.classList.replace('redBtn', 'greenBtn');
     // submit form if validation is true
     return true;
 
