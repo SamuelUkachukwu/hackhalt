@@ -37,7 +37,7 @@ let lastUsedId = data.members.length;
 // routes are defined below
 // Home page route
 app.get('/', (req, res) => {
-    res.render('index.ejs', { name: 'Samuel' });
+    res.render('index.ejs');
 });
 
 // Login route
@@ -80,6 +80,79 @@ app.get('/register', (req, res) => {
 });
 
 // Handle Registration form post
+function getPasswordStrength(dataPassword) {
+    // Criteria scores
+    const lengthScores = {
+        8: 2,
+        10: 3,
+        14: 5,
+    };
+
+    const lowercaseScores = {
+        1: 1,
+        2: 2,
+        3: 4,
+    };
+
+    const uppercaseScores = {
+        1: 1,
+        2: 2,
+        3: 4,
+    };
+
+    const numberScores = {
+        1: 1,
+        2: 2,
+        3: 4,
+    };
+
+    const specialCharScores = {
+        1: 1,
+        2: 2,
+        3: 4,
+    };
+
+    // Initialize scores
+    let score = 0;
+    let lowercaseCount = 0;
+    let uppercaseCount = 0;
+    let numberCount = 0;
+    let specialCharCount = 0;
+
+    // Calculate scores based on criteria
+    const passwordLength = dataPassword.length;
+    score += lengthScores[8] || 0; // Default to 0 if not found in the criteria
+    for (const char of dataPassword) {
+        if (char.match(/[a-z]/)) lowercaseCount++;
+        else if (char.match(/[A-Z]/)) uppercaseCount++;
+        else if (char.match(/[0-9]/)) numberCount++;
+        else if (char.match(/[!@#$%^&*()_+{}[\]:;<>,.?~\\\/\-="']/)) specialCharCount++;
+    }
+
+    score += lowercaseScores[Math.min(lowercaseCount, 3)] || 0;
+    score += uppercaseScores[Math.min(uppercaseCount, 3)] || 0;
+    score += numberScores[Math.min(numberCount, 3)] || 0;
+    score += specialCharScores[Math.min(specialCharCount, 3)] || 0;
+
+    // Determine the strength category based on the score
+    let strengthCategory;
+    if (score >= 20) {
+        strengthCategory = 'Very Strong';
+    } else if (score >= 15) {
+        strengthCategory = 'Strong';
+    } else if (score >= 10) {
+        strengthCategory = 'Medium';
+    } else {
+        strengthCategory = 'Weak';
+    }
+
+    return {
+        score: score,
+        strength: strengthCategory,
+    };
+}
+
+
 app.post('/register', async (req, res) => {
     try {
         const { username, email, password, confirmPassword } = req.body;
@@ -88,7 +161,7 @@ app.post('/register', async (req, res) => {
             req.session.errorMessage = 'Passwords do not match';
             return res.redirect('/register');
         }
-
+        const { score, strength } = getPasswordStrength(password);
         // Hash the password using bcrypt
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -125,6 +198,8 @@ app.post('/register', async (req, res) => {
             email,
             password: hashedPassword,
             admin: false,
+            score: score,
+            strength: strength,
         };
         // Add the new member to the 'members' array in the data object
         data.members.push(newMember);
@@ -145,6 +220,7 @@ app.post('/register', async (req, res) => {
         res.redirect('/register');
     }
 });
+
 
 // Logout route
 app.get('/logout', (req, res) => {
@@ -191,7 +267,7 @@ app.post('/change-password', async (req, res) => {
         }
 
         const { currentPassword, newPassword, confirmPassword } = req.body;
-        const user = req.session.user;
+        const user = data.members.find((member) => member.username === req.session.user.username);
 
         // Check if the provided current password matches the user's actual current password
         if (!(await bcrypt.compare(currentPassword, user.password))) {
@@ -219,7 +295,7 @@ app.post('/change-password', async (req, res) => {
             return res.redirect('/profile');
         }
 
-        // Check if password is more than 8 letters
+        // Check if password is at least 8 characters long
         if (newPassword.length < 8) {
             req.session.errorMessage = 'Password should be at least 8 characters long';
             return res.redirect('/profile');
@@ -231,29 +307,33 @@ app.post('/change-password', async (req, res) => {
             return res.redirect('/profile');
         }
 
-        // Hash the new password
+        const { score, strength } = getPasswordStrength(newPassword);
+
+        // Generate a new password hash for the user
         const saltRounds = 10;
         const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
 
-        // Update the user's password in the session
-        req.session.user.password = hashedNewPassword;
+        if (user) {
+            // Update the user's password in the data object
+            user.password = hashedNewPassword;
+            user.score = score;
+            user.strength = strength
 
-        // Persist the changes to the db.json file
-        const dbData = {
-            members: data.members, // Use the existing members array from the data object
-        };
-
-        // Write the updated data back to the db.json file
-        fs.writeFile(dataPath, JSON.stringify(dbData, null, 2), (error) => {
-            if (error) {
-                console.error('Error writing data:', error);
-                req.session.errorMessage = 'An error occurred during password change. Please try again.';
-            } else {
+            // Write the updated data back to the db.json file
+            fs.writeFile(dataPath, JSON.stringify(data, null, 2), (error) => {
+                if (error) {
+                    console.error('Error writing data:', error);
+                    req.session.errorMessage = 'An error occurred during password change. Please try again.';
+                } else {
+                    req.session.successMessage = 'Password changed successfully!';
+                }
                 req.session.successMessage = 'Password changed successfully!';
-            }
+                res.redirect('/login');
+            });
+        } else {
+            req.session.errorMessage = 'User not found.';
             res.redirect('/profile');
-        });
-
+        }
     } catch (error) {
         console.error(error);
         req.session.errorMessage = 'An error occurred during password change. Please try again.';

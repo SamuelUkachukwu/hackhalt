@@ -40,7 +40,8 @@
                         <div class="m-3">
                             <p class="card-text">Welcome <%= user.username %>
                             </p>
-                            <p class="card-text">Your current password sits at security level 1 </p>
+                            <p class="card-text">Your current password sits at security level <strong><%= user.score %></strong> </p>
+                            <p class="card-text">your password is considered <strong><%= user.strength %></strong></p>
                         </div>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"

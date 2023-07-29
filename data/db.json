@@ -5,14 +5,18 @@
       "username": "Testuser",
       "email": "example@email.com",
       "password": "$2b$10$t2Us3HJTqXM71Xf9biaF2O/UkG7Ax8Xe3NrlZYvE5rfsOY4MeTQae",
-      "admin": false
+      "admin": false,
+      "score": 10,
+      "strength": "weak"
     },
     {
       "id": 2,
-      "username": "Shybold",
+      "username": "Honest",
       "email": "test@mail.com",
-      "password": "$2b$10$jvyuQVG664dkTd/v/RHUg.BS7d.MYQ.RloNwLrcGyyM1/bWYdQrWO",
-      "admin": false
+      "password": "$2b$10$gkVwD6JVl06x97xEskmVFuTGDPSDDvwo9Cv36s9.epBnkxEIF0k4a",
+      "admin": false,
+      "score": 14,
+      "strength": "Medium"
     }
   ]
 }
