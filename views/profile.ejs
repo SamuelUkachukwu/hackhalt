@@ -115,6 +115,25 @@
                                 </p>
                                 <% } %>
                 </div>
+                <div class="bg-white rounded p-2">
+                    <p class="text-center pt-2"><strong>Members Score and password strength:</strong></p>
+                    <table class="table p-3 text-center">
+                        <tr class="p-2">
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Score</th>
+                            <th>Strength</th>
+                        </tr>
+                        <% for (const member of members) { %>
+                            <tr>
+                                <td><%= member.id %></td>
+                                <td><%= member.username %></td>
+                                <td><%= member.score %></td>
+                                <td><%= member.strength %></td>
+                            </tr>
+                        <% } %>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -241,6 +241,8 @@ app.get('/profile', (req, res) => {
         // If not authenticated, redirect back to the login page
         return res.redirect('/login');
     }
+    const sortedMembers = data.members.sort((a, b) => b.score - a.score);
+
     const user = req.session.user;
 
     const successMessage = req.session.successMessage;
@@ -248,7 +250,7 @@ app.get('/profile', (req, res) => {
     req.session.successMessage = null;
     req.session.errorMessage = null;
     // Render the profile page since the user is authenticated
-    res.render('profile.ejs', { user, successMessage, errorMessage });
+    res.render('profile.ejs', { user, members: sortedMembers, successMessage, errorMessage });
 });
 
 function hasConsecutiveCharacters(inputString) {
