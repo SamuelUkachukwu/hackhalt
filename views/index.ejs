@@ -23,10 +23,13 @@
         <div class="container">
             <a class="navbar-brand logo text-white ps-3" href="/">HackHalt</a>
             <div>
-                <a class="btn btn-large bg-transparent border-0 text-white text-uppercase pe-3"
-                    href="/register"><strong>Register</strong></a>
-                <a class="btn btn-large bg-info border-0 text-white text-uppercase pe-3" href="/login"><strong>Login</strong></a>
-            </div>
+                <% if (user) { %>
+                    <a class="btn btn-large bg-transparent border-0 text-white text-uppercase pe-3" href="/profile"><strong>Profile</strong></a>
+                <% } else { %>
+                    <a class="btn btn-large bg-transparent border-0 text-white text-uppercase pe-3" href="/register"><strong>Register</strong></a>
+                    <a class="btn btn-large bg-info border-0 text-white text-uppercase pe-3" href="/login"><strong>Login</strong></a>
+                <% } %>
+            </div>            
         </div>
     </nav>
 

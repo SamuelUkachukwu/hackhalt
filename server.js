@@ -37,7 +37,8 @@ let lastUsedId = data.members.length;
 // routes are defined below
 // Home page route
 app.get('/', (req, res) => {
-    res.render('index.ejs');
+    const user = req.session.isAuthenticated ? req.session.user : null;
+    res.render('index.ejs', { user });
 });
 
 // Login route
