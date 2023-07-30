@@ -67,10 +67,15 @@
             <div class="col-12 col-md-6">
                 <div class="row m-auto">
                     <% if (successMessage) { %>
-                        <p class="p-3 border text-center rounded message bg-success text-white">
+                        <p class="p-3 border text-center rounded message bg-success text-white" id="success-msg">
                             <%= successMessage %>
                         </p>
                     <% } %>
+                    <% if (errorMessage) { %>
+                        <p class="p-3 border text-center rounded bg-danger text-white message" id="error-msg">
+                            <%= errorMessage %>
+                        </p>
+                        <% } %>
                     <div id="emoji" class="col-12 col-md-11 rounded d-flex justify-content-center m-auto display py-2">
                         <img src="/images/sticker_7.png" alt="" style="width:  80%; margin: auto;">
                     </div>
@@ -84,6 +89,19 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
     <script src="/js/login.js"></script>
+    <script>
+        const removeMessage = () =>{
+            const errorMessage = document.getElementById('error-msg')
+            const successMessage = document.getElementById('success-msg')
+            if (errorMessage){
+                errorMessage.remove();
+            };
+            if (successMessage){
+                successMessage.remove();
+            };
+        }
+        setTimeout(removeMessage, 3000)
+    </script>
 </body>
 
 </html>

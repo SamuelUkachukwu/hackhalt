@@ -115,12 +115,12 @@
                 <div class="p-4 d-none d-md-block"></div>
                 <div class="mt-5">
                     <% if (successMessage) { %>
-                        <p class="p-3 border text-center rounded message bg-success text-white">
+                        <p class="p-3 border text-center rounded message bg-success text-white" id="success-msg">
                             <%= successMessage %>
                         </p>
                         <% } %>
                             <% if (errorMessage) { %>
-                                <p class="p-3 border text-center rounded bg-danger text-white message">
+                                <p class="p-3 border text-center rounded bg-danger text-white message" id="error-msg">
                                     <%= errorMessage %>
                                 </p>
                                 <% } %>
@@ -189,5 +189,18 @@
             }
         }
 
+    </script>
+    <script>
+        const removeMessage = () =>{
+            const errorMessage = document.getElementById('error-msg')
+            const successMessage = document.getElementById('success-msg')
+            if (errorMessage){
+                errorMessage.remove();
+            };
+            if (successMessage){
+                successMessage.remove();
+            };
+        }
+        setTimeout(removeMessage, 3000)
     </script>
 </body>

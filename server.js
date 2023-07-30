@@ -43,7 +43,9 @@ app.get('/', (req, res) => {
 
 // Login route
 app.get('/login', (req, res) => {
-    res.render('login.ejs', { successMessage: req.session.successMessage });
+    const successMessage = req.session.successMessage;
+    const errorMessage = req.session.errorMessage;
+    res.render('login.ejs', { successMessage, errorMessage });
 
 });
 
@@ -58,6 +60,8 @@ app.post('/login', async (req, res) => {
         // Check if the user exists and compare the hashed password
         if (!user || !(await bcrypt.compare(password, user.password))) {
             // If the username or password is incorrect, redirect back to the login page
+            req.session.errorMessage = 'username or password incorrect.';
+            req.session.successMessage = '';
             return res.redirect('/login');
         }
 
@@ -68,6 +72,8 @@ app.post('/login', async (req, res) => {
         req.session.user = user;
 
         // Redirect to the profile page
+        req.session.successMessage = 'login successful!';
+        req.session.errorMessage = '';
         res.redirect('/profile');
     } catch (error) {
         console.error(error);

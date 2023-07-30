@@ -17,6 +17,24 @@
       "admin": false,
       "score": 14,
       "strength": "Medium"
+    },
+    {
+      "id": 3,
+      "username": "Testusers",
+      "email": "example2@email.com",
+      "password": "$2b$10$8kUNpTOYXQBiVYXfIpY/quKvIrmAYuPR78LW.AikgicA5WYp8dU7a",
+      "admin": false,
+      "score": 18,
+      "strength": "Strong"
+    },
+    {
+      "id": 4,
+      "username": "Shybold",
+      "email": "shybold@yahoo.com",
+      "password": "$2b$10$BJLsnuHtjAW3uv8KmgIm/eLcjwfHsVvruADMpwacBgz3TbH6u4TBO",
+      "admin": false,
+      "score": 11,
+      "strength": "Medium"
     }
   ]
 }

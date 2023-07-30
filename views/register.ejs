@@ -81,7 +81,7 @@
                 <div class="row">
                     <div class="col-12 col-md-11 m-auto" id="feedbackArea">
                         <% if (errorMessage) { %>
-                            <p class="p-3 border text-center rounded bg-danger text-white message">
+                            <p class="p-3 border text-center rounded bg-danger text-white message" id="error-msg">
                                 <%= errorMessage %>
                             </p>
                         <% } %>
@@ -104,35 +104,15 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
     <script src="/js/register.js"></script>
-    <!-- <script type="module" src="assets/js/index.js"></script> -->
-    <!-- <script>
-        fetch('/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        })
-            .then(response => {
-                if (response.ok) {
-                    // Registration successful, redirect to profile page
-                    window.location.href = '/profile';
-                } else {
-                    // Registration failed, handle the error message
-                    response.json()
-                        .then(data => {
-                            alert(data.error); // Display the error message to the user
-                        })
-                        .catch(error => {
-                            console.error('Error parsing response:', error);
-                        });
-                }
-            })
-            .catch(error => {
-                console.error('Error during registration:', error);
-            });
-
-    </script> -->
+<script>
+    const removeMessage = () =>{
+        const errorMessage = document.getElementById('error-msg')
+        if (errorMessage){
+            errorMessage.remove();
+        };
+    }
+    setTimeout(removeMessage, 3000)
+</script>
 </body>
 
 </html>
