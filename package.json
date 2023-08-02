@@ -4,7 +4,7 @@
   "description": "HackHalt, an innovative cybersecurity platform that drives user adoption of good security practices through gamification, personalized feedback, and social comparison. Its game-like interface rewards users for implementing robust security measures, fostering healthy competition among peers. Mobile and browser compatibility ensure convenient access.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "devStart": "nodemon server.js"
   },
   "author": "Samuel Ukachukwu",
   "license": "ISC",
@@ -12,7 +12,9 @@
     "bcrypt": "^5.1.0",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "express-session": "^1.17.3"
+    "express-session": "^1.17.3",
+    "mongodb": "^5.7.0",
+    "mongoose": "^7.4.1"
   },
   "devDependencies": {
     "dotenv": "^16.3.1",

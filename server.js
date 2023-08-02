@@ -2,12 +2,30 @@ const express = require('express');
 const session = require('express-session');
 const app = express();
 const bcrypt = require('bcrypt');
-const fs = require('fs');
-const path = require('path');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 dotenv.config();
-const dataPath = path.join(__dirname, 'data', 'db.json');
+
+const port = process.env.PORT || 3000;
+
+const mongoURI = 'mongodb://127.0.0.1:27017/hackhalt';
+
+mongoose.connect(mongoURI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+});
+
+// Event listeners for successful and error connection
+mongoose.connection.on('connected', () => {
+    console.log('Connected to MongoDB using Mongoose');
+});
+
+mongoose.connection.on('error', (err) => {
+    console.error('Error connecting to MongoDB using Mongoose:', err);
+});
+
+const User = require('./models/users');
 
 // sets view engine
 app.set('view-engine', 'ejs');
@@ -15,24 +33,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 app.use(session({
     secret: process.env.SESSION_SECRET,
+    resave: false,
     saveUninitialized: false
 }));
 
-// Handles creation of member id
-let data = { members: [] };
-try {
-    const jsonData = fs.readFileSync(dataPath, 'utf8');
-    data = JSON.parse(jsonData);
-} catch (error) {
-    console.error('Error reading data:', error);
+async function findUserByUsername(username) {
+    return await User.findOne({ username: username });
 }
 
-// Function to find a user by username
-const findUserByUsername = (username) => {
-    return data.members.find((member) => member.username === username);
-};
-
-let lastUsedId = data.members.length;
+async function findUserByEmail(email) {
+    return await User.findOne({ email: email });
+}
 
 // routes are defined below
 // Home page route
@@ -45,6 +56,8 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     const successMessage = req.session.successMessage;
     const errorMessage = req.session.errorMessage;
+    req.session.successMessage = null;
+    req.session.errorMessage = null;
     res.render('login.ejs', { successMessage, errorMessage });
 
 });
@@ -53,18 +66,17 @@ app.get('/login', (req, res) => {
 app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
+        console.log(username, password)
 
         // Find the user with the given username in the data
-        const user = findUserByUsername(username);
+        const user = await findUserByUsername(username);
 
         // Check if the user exists and compare the hashed password
         if (!user || !(await bcrypt.compare(password, user.password))) {
             // If the username or password is incorrect, redirect back to the login page
             req.session.errorMessage = 'username or password incorrect.';
-            req.session.successMessage = '';
             return res.redirect('/login');
         }
-
         // User authentication successful; create a session to track authentication status
         req.session.isAuthenticated = true;
 
@@ -73,7 +85,6 @@ app.post('/login', async (req, res) => {
 
         // Redirect to the profile page
         req.session.successMessage = 'login successful!';
-        req.session.errorMessage = '';
         res.redirect('/profile');
     } catch (error) {
         console.error(error);
@@ -159,36 +170,14 @@ function getPasswordStrength(dataPassword) {
     };
 }
 
-
 app.post('/register', async (req, res) => {
     try {
         const { username, email, password, confirmPassword } = req.body;
-        // Check if the passwords match
-        if (password !== confirmPassword) {
-            req.session.errorMessage = 'Passwords do not match';
-            return res.redirect('/register');
-        }
-        const { score, strength } = getPasswordStrength(password);
-        // Hash the password using bcrypt
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-        // Read existing data from the 'db.json' file
-        let data = { members: [] };
-        try {
-            const jsonData = fs.readFileSync(dataPath, 'utf8');
-            data = JSON.parse(jsonData);
-        } catch (error) {
-            console.error('Error reading data:', error);
-            req.session.errorMessage = 'An error occurred during registration. Please try again.';
-            return res.redirect('/register');
-        }
 
         // Check if the username or email already exists
-        const existingUsername = data.members.find(member => member.username === username);
-        const existingEmail = data.members.find(member => member.email === email);
-
-        if (existingUsername) {
+        const existingUser = await findUserByUsername(username);
+        const existingEmail = await findUserByEmail(email);
+        if (existingUser) {
             req.session.errorMessage = 'Username already exists';
             return res.redirect('/register');
         }
@@ -198,29 +187,30 @@ app.post('/register', async (req, res) => {
             return res.redirect('/register');
         }
 
-        // Create a new member object
-        const newMember = {
-            id: ++lastUsedId,
+        // Check if the passwords match
+        if (password !== confirmPassword) {
+            req.session.errorMessage = 'Passwords do not match';
+            return res.redirect('/register');
+        }
+        const { score, strength } = getPasswordStrength(password);
+
+        // Hash the password using bcrypt
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Insert the new user into the database
+        await User.create({
             username,
             email,
             password: hashedPassword,
             admin: false,
             score: score,
-            strength: strength,
-        };
-        // Add the new member to the 'members' array in the data object
-        data.members.push(newMember);
-
-        // Write the updated data back to the 'db.json' file
-        fs.writeFile(dataPath, JSON.stringify(data, null, 2), (error) => {
-            if (error) {
-                console.error('Error writing data:', error);
-                req.session.errorMessage = 'An error occurred during registration. Please try again.';
-            } else {
-                req.session.successMessage = 'Registration successful! You can now log in with your credentials.';
-            }
-            res.redirect('/login');
+            strength: strength
         });
+
+        // Registration successful; redirect to the login page
+        req.session.successMessage = 'Registration successful! You can now log in with your credentials.';
+        res.redirect('/login');
     } catch (error) {
         console.error(error);
         req.session.errorMessage = 'An error occurred during registration. Please try again.';
@@ -228,36 +218,41 @@ app.post('/register', async (req, res) => {
     }
 });
 
-
 // Logout route
 app.get('/logout', (req, res) => {
     // Destroy the session to log the user out
     req.session.destroy((error) => {
         if (error) {
             req.session.errorMessage = 'Error logging out of session. Please try again.';
-        } else {
-            res.redirect('/');
         }
+        res.redirect('/');
     });
 });
 
 // Profile route
-app.get('/profile', (req, res) => {
+app.get('/profile', async (req, res) => {
+    const successMessage = req.session.successMessage;
+    const errorMessage = req.session.errorMessage;
+    req.session.successMessage = null;
+    req.session.errorMessage = null;
     // Check if the user is authenticated
     if (!req.session.isAuthenticated) {
         // If not authenticated, redirect back to the login page
         return res.redirect('/login');
     }
-    const sortedMembers = data.members.sort((a, b) => b.score - a.score);
 
-    const user = req.session.user;
+    try {
+        // Find the authenticated user using Mongoose model
+        const user = await User.findOne({ username: req.session.user.username });
 
-    const successMessage = req.session.successMessage;
-    const errorMessage = req.session.errorMessage;
-    req.session.successMessage = null;
-    req.session.errorMessage = null;
-    // Render the profile page since the user is authenticated
-    res.render('profile.ejs', { user, members: sortedMembers, successMessage, errorMessage });
+        // Find all users sorted by score using Mongoose model
+        const users = await User.find().sort({ score: -1 }).exec();
+
+        res.render('profile.ejs', { user, users, successMessage, errorMessage });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        return res.redirect('/');
+    }
 });
 
 function hasConsecutiveCharacters(inputString) {
@@ -276,10 +271,11 @@ app.post('/change-password', async (req, res) => {
         }
 
         const { currentPassword, newPassword, confirmPassword } = req.body;
-        const user = data.members.find((member) => member.username === req.session.user.username);
+        const user = await db.collection('users').findOne({ username: req.session.user.username });
 
         // Check if the provided current password matches the user's actual current password
-        if (!(await bcrypt.compare(currentPassword, user.password))) {
+        const passwordMatches = await bcrypt.compare(currentPassword, user.password);
+        if (!passwordMatches) {
             req.session.errorMessage = 'Incorrect current password';
             return res.redirect('/profile');
         }
@@ -322,27 +318,14 @@ app.post('/change-password', async (req, res) => {
         const saltRounds = 10;
         const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
 
-        if (user) {
-            // Update the user's password in the data object
-            user.password = hashedNewPassword;
-            user.score = score;
-            user.strength = strength
+        // Update the user's password and other information in the database
+        await User.findOneAndUpdate(
+            { username: user.username },
+            { $set: { password: hashedNewPassword, score: score, strength: strength } }
+        );
 
-            // Write the updated data back to the db.json file
-            fs.writeFile(dataPath, JSON.stringify(data, null, 2), (error) => {
-                if (error) {
-                    console.error('Error writing data:', error);
-                    req.session.errorMessage = 'An error occurred during password change. Please try again.';
-                } else {
-                    req.session.successMessage = 'Password changed successfully!';
-                }
-                req.session.successMessage = 'Password changed successfully!';
-                res.redirect('/login');
-            });
-        } else {
-            req.session.errorMessage = 'User not found.';
-            res.redirect('/profile');
-        }
+        req.session.successMessage = 'Password changed successfully!';
+        res.redirect('/login');
     } catch (error) {
         console.error(error);
         req.session.errorMessage = 'An error occurred during password change. Please try again.';
@@ -350,7 +333,7 @@ app.post('/change-password', async (req, res) => {
     }
 });
 
-// Start the server and listen on port 3000
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+// Start the server and listen on the configured port
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });

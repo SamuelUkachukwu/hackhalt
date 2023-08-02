@@ -126,7 +126,7 @@
                                 <% } %>
                 </div>
                 <div class="bg-white rounded p-2">
-                    <p class="text-center pt-2"><strong>Members Score and password strength:</strong></p>
+                    <p class="text-center pt-2"><strong>Users Score and password strength:</strong></p>
                     <table class="table p-3 text-center">
                         <tr class="p-2">
                             <th>ID</th>
@@ -134,19 +134,19 @@
                             <th>Score</th>
                             <th>Strength</th>
                         </tr>
-                        <% for (const member of members) { %>
+                        <% for (const user of users) { %>
                             <tr>
                                 <td>
-                                    <%= member.id %>
+                                    <%= user.id %>
                                 </td>
                                 <td>
-                                    <%= member.username %>
+                                    <%= user.username %>
                                 </td>
                                 <td>
-                                    <%= member.score %>
+                                    <%= user.score %>
                                 </td>
                                 <td>
-                                    <%= member.strength %>
+                                    <%= user.strength %>
                                 </td>
                             </tr>
                             <% } %>
