@@ -129,7 +129,7 @@
                     <p class="text-center pt-2"><strong>Users Score and password strength:</strong></p>
                     <table class="table p-3 text-center">
                         <tr class="p-2">
-                            <th>ID</th>
+                            <th>No.</th>
                             <th>Username</th>
                             <th>Score</th>
                             <th>Strength</th>
@@ -137,7 +137,7 @@
                         <% for (const user of users) { %>
                             <tr>
                                 <td>
-                                    <%= user.id %>
+                                    <%= count %>
                                 </td>
                                 <td>
                                     <%= user.username %>
@@ -149,7 +149,7 @@
                                     <%= user.strength %>
                                 </td>
                             </tr>
-                            <% } %>
+                            <% count++; } %>
                     </table>
                 </div>
             </div>
@@ -191,13 +191,13 @@
 
     </script>
     <script>
-        const removeMessage = () =>{
+        const removeMessage = () => {
             const errorMessage = document.getElementById('error-msg')
             const successMessage = document.getElementById('success-msg')
-            if (errorMessage){
+            if (errorMessage) {
                 errorMessage.remove();
             };
-            if (successMessage){
+            if (successMessage) {
                 successMessage.remove();
             };
         }

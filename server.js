@@ -66,7 +66,6 @@ app.get('/login', (req, res) => {
 app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-        console.log(username, password)
 
         // Find the user with the given username in the data
         const user = await findUserByUsername(username);
@@ -233,6 +232,7 @@ app.get('/logout', (req, res) => {
 app.get('/profile', async (req, res) => {
     const successMessage = req.session.successMessage;
     const errorMessage = req.session.errorMessage;
+    let count = 1
     req.session.successMessage = null;
     req.session.errorMessage = null;
     // Check if the user is authenticated
@@ -248,7 +248,7 @@ app.get('/profile', async (req, res) => {
         // Find all users sorted by score using Mongoose model
         const users = await User.find().sort({ score: -1 }).exec();
 
-        res.render('profile.ejs', { user, users, successMessage, errorMessage });
+        res.render('profile.ejs', { user, users, count, successMessage, errorMessage });
     } catch (error) {
         console.error('Error fetching users:', error);
         return res.redirect('/');
@@ -271,7 +271,7 @@ app.post('/change-password', async (req, res) => {
         }
 
         const { currentPassword, newPassword, confirmPassword } = req.body;
-        const user = await db.collection('users').findOne({ username: req.session.user.username });
+        const user = await User.findOne({ username: req.session.user.username });
 
         // Check if the provided current password matches the user's actual current password
         const passwordMatches = await bcrypt.compare(currentPassword, user.password);
@@ -319,10 +319,10 @@ app.post('/change-password', async (req, res) => {
         const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
 
         // Update the user's password and other information in the database
-        await User.findOneAndUpdate(
-            { username: user.username },
-            { $set: { password: hashedNewPassword, score: score, strength: strength } }
-        );
+        user.password = hashedNewPassword;
+        user.score = score;
+        user.strength = strength;
+        await user.save();
 
         req.session.successMessage = 'Password changed successfully!';
         res.redirect('/login');
@@ -335,5 +335,5 @@ app.post('/change-password', async (req, res) => {
 
 // Start the server and listen on the configured port
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+
 });
