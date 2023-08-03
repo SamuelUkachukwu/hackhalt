@@ -9,7 +9,7 @@ dotenv.config();
 
 const port = process.env.PORT || 3000;
 
-const mongoURI = 'mongodb://127.0.0.1:27017/hackhalt';
+const mongoURI = process.env.URI
 
 mongoose.connect(mongoURI, {
     useUnifiedTopology: true,
@@ -335,5 +335,5 @@ app.post('/change-password', async (req, res) => {
 
 // Start the server and listen on the configured port
 app.listen(port, () => {
-
+    console.log(`Server is running on http://localhost:${port}`);
 });
