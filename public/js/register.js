@@ -94,8 +94,8 @@ function validateForm() {
     }
 
     // Check if password contains capital letters, numbers, and characters
-    if (!/(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)) {
-        displayFeedback('Password must include a combination of capital letters, numbers, and characters.', '#E80000');
+    if (!/(?=.*[A-Z])(?=.*[0-9])(?=.*[!£$%^&*@#~?])/.test(password)) {
+        displayFeedback('Password must include a combination of capital letters, numbers, and characters (! £ $ % ^ & * @ # ~ ?).', '#E80000');
         emoji.innerHTML = `<img src="/images/sticker_27.png" alt="" style="width:  80%; margin: auto;">`;
         submitBtn.classList.add('redBtn');
         return false;

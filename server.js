@@ -293,10 +293,10 @@ app.post('/change-password', async (req, res) => {
         }
 
         // Check if password contains capital letters, numbers, and characters
-        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!£$%^&*@#~?])[A-Za-z\d@$!%*?&]+$/;
         if (!passwordRegex.test(newPassword)) {
             req.session.errorMessage =
-                'Password should contain capital letters, numbers, and special characters (@ $ ! % * ? &)';
+                'Password should contain capital letters, numbers, and special characters (! £ $ % ^ & * @ # ~ ?)';
             return res.redirect('/profile');
         }
 
