@@ -41,9 +41,9 @@
                         <div class="m-3">
                             <p class="card-text">Welcome <%= user.username %>
                             </p>
-                            <p class="card-text">Your current password sits at security level <strong>
-                                    <%= user.score %>
-                                </strong> </p>
+                            <p class="card-text">Your current password strength is <strong>
+                                    <%= user.score %></strong>  out of <strong>20</strong>
+                                </p>
                             <p class="card-text">your password is considered <strong>
                                     <%= user.strength %>
                                 </strong></p>
